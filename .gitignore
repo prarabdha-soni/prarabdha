@@ -1,0 +1,44 @@
+# Environment variables
+.env
+
+# Build artifacts
+build/
+dist/
+*.egg-info/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Cache directories
+.cache/
+.vector_cache/
+test_secure_cache/
+demo_cache/
+
+# Database files
+*.db
+*.sqlite
+
+# Test files
+test_export.json
+test_metadata.db
+demo_metadata.db
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Virtual environments
+.venv/
+venv/
+env/
+
+# Logs
+*.log 

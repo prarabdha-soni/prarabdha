@@ -1,0 +1,72 @@
+[project]
+name = "prarabdha-cache"
+version = "0.1.0"
+description = "Modular AI Cache System for chats, audio, and video data ingestion with advanced features like compression, encryption, and real-time monitoring."
+authors = [{ name="Prarabdha Soni", email="prarabdha.soni@gmail.com" }]
+readme = "README.md"
+requires-python = ">=3.8"
+license = {text = "MIT"}
+keywords = ["cache", "ai", "vector", "rag", "audio", "video", "compression", "encryption"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Topic :: Database",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+]
+
+dependencies = [
+    "redis>=4.0",
+    "faiss-cpu",
+    "fastapi",
+    "uvicorn",
+    "numpy",
+    "aiohttp",
+    "pydantic",
+    "typer[all]",
+    "cryptography",
+    "pandas",
+    "pyarrow",
+    "psutil",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest",
+    "black",
+    "flake8",
+    "mypy",
+]
+
+[project.urls]
+Homepage = "https://github.com/prarabdha21/prarabdha"
+Repository = "https://github.com/prarabdha21/prarabdha"
+Issues = "https://github.com/prarabdha21/prarabdha/issues"
+
+[project.scripts]
+prarabdha = "prarabdha.cli.cli:app"
+
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["prarabdha*"]
+
+[tool.black]
+line-length = 88
+target-version = ['py38']
+
+[tool.mypy]
+python_version = "3.8"
+warn_return_any = true
+warn_unused_configs = true
+disallow_untyped_defs = true
