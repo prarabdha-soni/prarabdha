@@ -1,6 +1,6 @@
 [project]
 name = "prarabdha"
-version = "0.1.3"
+version = "0.2.0"
 description = "Modular AI Cache System for chats, audio, and video data ingestion"
 authors = [{ name="Prarabdha Soni", email="prarabdha.soni@gmail.com" }]
 readme = "README.md"

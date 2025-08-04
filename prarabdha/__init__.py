@@ -10,7 +10,7 @@ A futuristic modular caching system for AI applications supporting:
 - CLI tools for management
 """
 
-__version__ = "0.1.0"
+__version__ = "0.2.0"
 __author__ = "Prarabdha Soni"
 
 # Core components
@@ -33,6 +33,12 @@ from .audio import audioCache
 # Video components
 from .video.video_cache import VideoCache, VideoCacheManager, VideoSegment, VideoFrame
 from .video import videoCache
+
+# Multimodal components
+from .multimodal_cache_manager import MultimodalCacheManager
+from .advanced_multimodal_cache import AdvancedMultimodalCache
+from .normalizer.semantic_input_cache import SemanticInputCache
+from .normalizer.heavy_input_cache import HeavyInputCache
 
 # CLI and API
 from .cli.cli import app as cli_app
@@ -73,6 +79,12 @@ __all__ = [
     "VideoSegment",
     "VideoFrame",
     "videoCache",
+    
+    # Multimodal
+    "MultimodalCacheManager",
+    "AdvancedMultimodalCache",
+    "SemanticInputCache",
+    "HeavyInputCache",
     
     # CLI and API
     "cli_app",
