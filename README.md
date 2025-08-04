@@ -1,6 +1,6 @@
-# Prarabdha - Modular AI Cache System
+# Prarabdha - Advanced Multimodal AI Cache System
 
-A futuristic modular caching system for AI applications supporting multi-layer caching, vector similarity search, RAG-aware chunk indexing, and async ingestion APIs.
+A cutting-edge multimodal caching system for AI applications featuring **token prefill reuse**, **adaptive TTL with ML-based prediction**, **semantic input caching**, and **heavy input optimization**. Built for production-scale LLM deployments with 8x performance improvements.
 
 ## Performance Benefits
 
@@ -12,437 +12,411 @@ A futuristic modular caching system for AI applications supporting multi-layer c
 - **3-10x delay savings** and GPU cycle reduction
 - **Multi-layer caching** across GPU, RAM, Disk, and Redis
 
-## Features
+## 🚀 Advanced Features (2025-2027)
+
+### 1. Token/Segment Prefill Reuse (Industry First)
+Cross-session KV cache reuse with trie-based sequence matching for unprecedented performance gains.
+
+```python
+from prarabdha import AdvancedMultimodalCache
+
+# Initialize with prefill reuse
+cache = AdvancedMultimodalCache(enable_prefill_reuse=True)
+
+# Cache with token prefill
+tokens = [1000, 1001, 1002, 1003, 1004]
+kv_cache = {'layer_0': np.random.rand(32, 768).astype(np.float32)}
+
+result = cache.cache_text_with_prefill(
+    prompt="Explain quantum computing",
+    response="Quantum computing uses quantum mechanical phenomena...",
+    tokens=tokens,
+    kv_cache=kv_cache,
+    user_id="user_123",
+    session_id="session_456"
+)
+
+# Retrieve with prefill reuse
+retrieved = cache.get_text_with_prefill(
+    prompt="Explain quantum computing",
+    tokens=tokens,
+    user_id="user_123"
+)
+```
+
+### 2. Adaptive TTL with ML-based Prediction
+Intelligent cache duration prediction using access patterns, semantic distance, and user priority.
+
+```python
+# Cache with adaptive TTL
+cache = AdvancedMultimodalCache(enable_adaptive_ttl=True)
+
+# High priority content (longer TTL)
+cache.cache_text_with_prefill(
+    prompt="Important system configuration",
+    response="System configuration details...",
+    tokens=[2000, 2001, 2002],
+    kv_cache={'layer_0': np.random.rand(32, 768).astype(np.float32)},
+    user_id="admin",
+    user_priority=5  # High priority = longer TTL
+)
+
+# Low priority content (shorter TTL)
+cache.cache_text_with_prefill(
+    prompt="Temporary debug info",
+    response="Debug information...",
+    tokens=[3000, 3001],
+    kv_cache={'layer_0': np.random.rand(32, 768).astype(np.float32)},
+    user_id="developer",
+    user_priority=1  # Low priority = shorter TTL
+)
+```
+
+### 3. Enhanced Semantic Input Caching
+Advanced prompt normalization and paraphrase detection for input-level caching.
+
+```python
+from prarabdha import SemanticInputCache
+
+cache = SemanticInputCache(threshold=0.85)
+
+# Cache prompts with enhanced normalization
+cache.put("Please explain quantum computing", "Quantum computing uses...")
+cache.put("Can you tell me about machine learning?", "Machine learning is...")
+
+# Retrieve with paraphrase detection
+response = cache.get("I want to know about quantum computing")  # Will find cached response
+```
+
+### 4. Heavy Input Optimization
+High-throughput caching optimized for heavy input systems with batch operations.
+
+```python
+from prarabdha import HeavyInputCache
+
+cache = HeavyInputCache(max_size=50000, similarity_threshold=0.85)
+
+# Batch operations for high throughput
+batch_data = [
+    ("Prompt 1", "Response 1"),
+    ("Prompt 2", "Response 2"),
+    ("Prompt 3", "Response 3")
+]
+results = cache.batch_put(batch_data)
+
+# Batch retrieval
+prompts = ["Prompt 1", "Prompt 2"]
+responses = cache.batch_get(prompts)
+```
+
+### 5. Unified Multimodal Caching
+Cross-modal search across text, video, and audio with unified vector indexing.
+
+```python
+from prarabdha import MultimodalCacheManager
+
+manager = MultimodalCacheManager()
+
+# Cache different modalities
+text_id = manager.cache_text("Explain AI", "AI is...")
+frame_id = manager.cache_video_frame(frame, "Person walking")
+audio_id = manager.cache_audio_segment(waveform, 16000, "Speech")
+
+# Cross-modal search
+results = manager.cross_modal_search("person", modality="all")
+```
+
+## 🏗️ Architecture
 
 ### Core Components
-- **Multi-layer KV Store**: RAM, disk, and Redis support with TTL and eviction policies
-- **Vector Index**: FAISS-based semantic similarity search
-- **RAG Chunk Index**: Document-aware chunking and retrieval
-- **Audio Cache**: Feature-level audio processing cache
-- **Video Cache**: Segment/frame-level video processing cache
 
-### Advanced Features
-- **LRU/LFU Eviction**: Configurable memory eviction policies
-- **TTL Support**: Automatic expiration for all cache layers
-- **Redis Integration**: Distributed caching with auto-sharding
-- **RAG Integration**: Similarity-based retrieval with fallback
-- **Async APIs**: FastAPI-based ingestion and inspection
-- **CLI Tools**: Command-line interface for management
+```
+prarabdha/
+├── core/
+│   ├── token_prefill_cache.py    # Cross-session KV cache reuse
+│   ├── adaptive_ttl_cache.py     # ML-based TTL prediction
+│   ├── vector_index.py           # FAISS-based similarity search
+│   └── kv_store.py              # Multi-layer KV store
+├── normalizer/
+│   ├── semantic_input_cache.py   # Enhanced prompt normalization
+│   └── heavy_input_cache.py      # High-throughput optimization
+├── multimodal_cache_manager.py   # Unified cache coordination
+├── advanced_multimodal_cache.py  # All features combined
+├── video/video_cache.py         # Video frame caching
+├── audio/audio_cache.py         # Audio segment caching
+└── examples/
+    └── multimodal_caching_demo.py # Comprehensive demos
+```
 
-## Installation
+### Multi-Layer Caching
+
+![Prarabdha Architecture](prarabdha_architecture.png)
+
+- **GPU Cache**: FAISS + KV Store for fastest access
+- **RAM Cache**: LRU/LFU with TTL for high-speed operations
+- **Redis Cache**: Distributed + Auto-sharding for scalability
+- **Disk Cache**: Persistent + Compression for long-term storage
+
+## 📦 Installation
 
 ```bash
-# Install dependencies
-pip install redis faiss-cpu fastapi uvicorn numpy aiohttp pydantic typer
-
-# Clone the repository
-git clone <repository-url>
-cd prarabdha_cache_package
-
-# Run examples
-python3 simple_example.py
+pip install prarabdha
 ```
 
-## Quick Start
+## 🚀 Quick Start
 
-### Clean Import Interface
-
-The easiest way to use Prarabdha is with the clean import interface:
+### Basic Multimodal Caching
 
 ```python
-# Import specific cache types
-from prarabdha.chats import ChatCache
-from prarabdha.audio import audioCache
-from prarabdha.video import videoCache
-from prarabdha.rag import RAGCache
+from prarabdha import MultimodalCacheManager
+import numpy as np
 
-# Create cache instances
-chat_cache = ChatCache()
-audio_cache = audioCache()
-video_cache = videoCache()
-rag_cache = RAGCache()
+# Initialize cache manager
+cache = MultimodalCacheManager(similarity_threshold=0.85)
+
+# Cache text content
+text_result = cache.cache_text(
+    "Explain quantum computing",
+    "Quantum computing uses quantum mechanical phenomena...",
+    {"topic": "quantum", "difficulty": "intermediate"}
+)
+
+# Cache video frame
+frame = np.random.rand(224, 224, 3)  # Simulated video frame
+video_result = cache.cache_video_frame(
+    frame,
+    "A person walking in a park",
+    {"scene": "outdoor", "action": "walking"}
+)
+
+# Cache audio segment
+waveform = np.random.rand(16000)  # 1 second audio at 16kHz
+audio_result = cache.cache_audio_segment(
+    waveform,
+    16000,
+    "Speech about artificial intelligence",
+    {"content": "speech", "topic": "AI"}
+)
+
+# Retrieve content
+text_response = cache.get_text("Explain quantum computing")
+video_response = cache.get_video_frame(frame)
+audio_response = cache.get_audio_segment(waveform, 16000)
+
+# Cross-modal search
+results = cache.cross_modal_search("person", modality='all')
 ```
 
-### Chat Caching
+### Advanced Features Demo
 
 ```python
-from prarabdha.chats import ChatCache
+from prarabdha import AdvancedMultimodalCache
+import numpy as np
 
-# Create chat cache
-chat_cache = ChatCache()
+# Initialize with all advanced features
+advanced_cache = AdvancedMultimodalCache(
+    max_memory_gb=32.0,
+    similarity_threshold=0.85,
+    enable_prefill_reuse=True,
+    enable_adaptive_ttl=True,
+    enable_heavy_input=True
+)
 
-# Cache a chat segment
-segment = {
-    "content": "Hello, how can I help you?",
-    "user_id": "user123",
-    "session_id": "session456",
-    "timestamp": 1234567890,
-    "model": "gpt-4"
+# Token prefill reuse
+tokens = [1000, 1001, 1002, 1003, 1004]
+kv_cache = {
+    'layer_0': np.random.rand(32, 768).astype(np.float32),
+    'layer_1': np.random.rand(32, 768).astype(np.float32)
 }
 
-cache_key = chat_cache.cache_segment(segment)
-print(f"Cached with key: {cache_key}")
+# Cache with prefill
+prefill_result = advanced_cache.cache_text_with_prefill(
+    prompt="Explain quantum computing",
+    response="Quantum computing uses quantum mechanical phenomena...",
+    tokens=tokens,
+    kv_cache=kv_cache,
+    user_id="user_123",
+    session_id="session_456",
+    user_priority=2,
+    metadata={"topic": "quantum", "complexity": "high"}
+)
 
-# Retrieve segment with RAG fallback
-retrieved = chat_cache.get_segment_with_rag_fallback(segment)
+# Retrieve with prefill reuse
+retrieved = advanced_cache.get_text_with_prefill(
+    prompt="Explain quantum computing",
+    tokens=tokens,
+    user_id="user_123"
+)
+
 if retrieved:
-    print(f"Retrieved: {retrieved['content']}")
+    print(f"Response: {retrieved['response']}")
+    print(f"Cache type: {retrieved['cache_type']}")
+    print(f"Prefix tokens: {len(retrieved['prefix_tokens'])}")
+    print(f"KV cache layers: {len(retrieved['kv_cache'])}")
+```
 
-# Get statistics
-stats = chat_cache.get_stats()
+## 📊 Performance Monitoring
+
+```python
+# Get comprehensive statistics
+stats = advanced_cache.get_stats()
 print(f"Hit rate: {stats['hit_rate']:.2%}")
+print(f"Prefill hits: {stats['prefill_hits']}")
+print(f"Adaptive TTL hits: {stats['adaptive_ttl_hits']}")
+print(f"Heavy input hits: {stats['heavy_input_hits']}")
+print(f"Multimodal hits: {stats['multimodal_hits']}")
+
+# Export cache data for analysis
+export_data = advanced_cache.export_cache_data()
 ```
 
-### Audio Caching
+## 🔧 Configuration
 
+### Similarity Thresholds
 ```python
-from prarabdha.audio import audioCache
-import numpy as np
-
-# Create audio cache
-audio_cache = audioCache()
-
-# Cache audio features
-features = np.random.rand(13, 100)  # MFCC features
-feature_key = audio_cache.cache_audio_features(
-    audio_id="audio1",
-    feature_type="mfcc",
-    features=features,
-    metadata={"duration": 5.0, "sample_rate": 16000}
-)
-
-# Retrieve features
-retrieved = audio_cache.get_audio_features("audio1", "mfcc")
-if retrieved:
-    print(f"Retrieved features shape: {retrieved.features.shape}")
+# Adjust thresholds for different use cases
+semantic_threshold = 0.85    # Text similarity
+video_threshold = 0.85       # Video similarity  
+audio_threshold = 0.85       # Audio similarity
 ```
 
-### Video Caching
-
+### Memory Management
 ```python
-from prarabdha.video import videoCache
-import numpy as np
-
-# Create video cache
-video_cache = videoCache()
-
-# Cache video segment
-segment_key = video_cache.cache_video_segment(
-    video_id="video1",
-    segment_id="seg1",
-    start_frame=0,
-    end_frame=150,
-    start_time=0.0,
-    end_time=5.0,
-    features=np.random.rand(768),
-    metadata={"resolution": "1920x1080", "fps": 30}
-)
-
-# Retrieve segment
-retrieved = video_cache.get_video_segment("video1", "seg1")
-if retrieved:
-    print(f"Retrieved segment: {retrieved.video_id}:{retrieved.segment_id}")
+# Configure memory limits
+max_memory_gb = 32.0         # Maximum memory usage
+max_entries = 10000          # Maximum cache entries
+batch_size = 1000            # Batch operation size
 ```
 
-### RAG Chunk Indexing
-
+### Feature Toggles
 ```python
-from prarabdha.rag import RAGCache
-
-# Create RAG cache
-rag_cache = RAGCache()
-
-# Add document
-chunk_ids = rag_cache.add_document(
-    document_id="doc1",
-    content="Python is a high-level programming language...",
-    metadata={"author": "John Doe", "topic": "programming"}
-)
-
-# Search similar chunks
-similar_chunks = rag_cache.search_similar_chunks("What is Python?", k=3)
-for vector_id, similarity, metadata in similar_chunks:
-    chunk = rag_cache.get_chunk(metadata.get('chunk_id', ''))
-    print(f"Similarity: {similarity:.3f}, Content: {chunk.content[:100]}...")
+# Enable/disable features
+enable_prefill_reuse = True   # Token prefill reuse
+enable_adaptive_ttl = True    # ML-based TTL prediction
+enable_heavy_input = True     # High-throughput optimization
+enable_cross_modal = True     # Cross-modal search
 ```
 
-### Advanced Usage
+## 🎯 Use Cases
 
-For more advanced usage, you can import the full classes:
+### Long Context LLM Applications
+- **Token prefill reuse** for repeated context processing
+- **Adaptive TTL** for optimal cache duration
+- **Semantic clustering** for similar contexts
 
-```python
-from prarabdha import (
-    SegmentCacheManager,
-    SegmentCacheManagerFactory,
-    AudioCache,
-    VideoCache,
-    ChunkIndex
-)
+### RAG (Retrieval Augmented Generation) Systems
+- **Cross-modal search** for text, video, and audio
+- **Heavy input optimization** for high-throughput retrieval
+- **Unified vector indexing** for efficient similarity search
 
-# Create with custom configuration
-cache_manager = SegmentCacheManagerFactory.create_high_performance_manager()
-audio_cache = AudioCache(feature_dimension=1024, similarity_threshold=0.9)
-video_cache = VideoCache(segment_duration=10.0)
-chunk_index = ChunkIndex(chunk_size=2000, chunk_overlap=400)
-```
+### Multi-Server Deployments
+- **Redis-backed distributed caching**
+- **User isolation** with cross-user memory sharing
+- **Real-time monitoring** and performance analytics
 
-## CLI Usage
+### Cost-Optimized AI Infrastructure
+- **GPU cycle reduction** through intelligent caching
+- **Memory optimization** with semantic-aware eviction
+- **Batch operations** for high-throughput processing
 
-### Basic Commands
+## 🚀 Key Innovations
 
-```bash
-# Show help
-python3 -m prarabdha.cli.cli --help
+### 1. Token Prefill Reuse (Industry First)
+- **Cross-session KV cache reuse** with trie-based matching
+- **Multi-tenant support** with user isolation
+- **Intelligent memory management** with semantic truncation
+- **Efficient storage** with estimated memory usage tracking
 
-# View cache statistics
-python3 -m prarabdha.cli.cli stats
+### 2. Adaptive TTL with ML Prediction
+- **Machine learning-based TTL prediction** using access patterns
+- **Semantic decay** eviction based on content similarity
+- **Multi-factor scoring** for optimal cache management
+- **Context-aware caching** with user priority consideration
 
-# Clear all cache data
-python3 -m prarabdha.cli.cli clear --yes
+### 3. Enhanced Semantic Input Caching
+- **Advanced prompt normalization** with domain-specific rules
+- **Paraphrase detection engine** using synonym groups
+- **Semantic clustering** for efficient retrieval
+- **Threshold-based retrieval** with configurable similarity
 
-# Search for similar segments
-python3 -m prarabdha.cli.cli search "Python programming help" --limit 5
-```
+### 4. Heavy Input Optimization
+- **High-throughput caching** optimized for heavy input systems
+- **Batch operations** for efficient processing
+- **Performance tracking** with response time monitoring
+- **Memory optimization** with intelligent eviction strategies
 
-### Ingest Data
+### 5. Unified Multimodal Management
+- **Cross-modal search** across text, video, and audio
+- **Unified vector indexing** with FAISS-based similarity search
+- **Rich metadata storage** with export capabilities
+- **Comprehensive statistics** and performance monitoring
 
-```bash
-# Ingest from JSON file
-python3 -m prarabdha.cli.cli ingest segments.json --verbose
+## 📈 Performance Metrics
 
-# Ingest with Redis backend
-python3 -m prarabdha.cli.cli ingest segments.json --redis redis://localhost:6379/0
+### Cache Statistics
+- **Hit rate tracking** per modality and feature
+- **Request counting** and analysis
+- **Performance metrics** export
+- **Real-time monitoring** dashboard
 
-# Ingest with high-performance strategy
-python3 -m prarabdha.cli.cli ingest segments.json --strategy high-performance
-```
+### Scalability Features
+- **FAISS** for efficient similarity search
+- **Redis** for distributed caching
+- **Vector indexing** for fast retrieval
+- **Batch operations** for high throughput
 
-## API Usage
+### Production Ready
+- **Configurable similarity thresholds**
+- **Error handling** and recovery
+- **Cache persistence** and backup
+- **Cross-modal metadata storage**
 
-### Start the API Server
-
-```bash
-# Start the FastAPI server
-python3 -m prarabdha.api.app
-```
-
-### API Endpoints
-
-```python
-import requests
-
-# Health check
-response = requests.get("http://localhost:8000/health")
-print(response.json())
-
-# Ingest segments
-segments = [
-    {
-        "content": "Hello, how can I help you?",
-        "user_id": "user123",
-        "session_id": "session456",
-        "timestamp": 1234567890,
-        "model": "gpt-4"
-    }
-]
-
-response = requests.post("http://localhost:8000/ingest", json={
-    "segments": segments,
-    "enable_rag": True,
-    "similarity_threshold": 0.8
-})
-print(response.json())
-
-# Search similar segments
-response = requests.post("http://localhost:8000/search", json={
-    "query": "Python programming help",
-    "k": 3,
-    "threshold": 0.7
-})
-print(response.json())
-
-# Get statistics
-response = requests.get("http://localhost:8000/stats")
-print(response.json())
-```
-
-## Configuration
-
-### Redis Configuration
-
-```python
-from prarabdha import SegmentCacheManagerFactory
-
-# Create cache manager with Redis
-redis_config = {
-    'host': 'localhost',
-    'port': 6379,
-    'db': 0
-}
-
-cache_manager = SegmentCacheManagerFactory.create_redis_manager(redis_config)
-```
-
-### Custom Strategies
-
-```python
-from prarabdha import CacheStrategy, SegmentCacheManager
-
-class CustomStrategy(CacheStrategy):
-    def should_cache(self, segment):
-        # Custom caching logic
-        return len(segment.get('content', '')) > 50
-    
-    def generate_key(self, segment):
-        # Custom key generation
-        return f"{segment['user_id']}:{hash(segment['content'])}"
-    
-    def extract_features(self, segment):
-        # Custom feature extraction
-        return {
-            'content_length': len(segment.get('content', '')),
-            'user_id': segment.get('user_id', ''),
-            'timestamp': segment.get('timestamp', 0)
-        }
-
-# Use custom strategy
-cache_manager = SegmentCacheManager(strategy=CustomStrategy())
-```
-
-## Architecture
-
-### Multi-layer Cache Architecture
-
-```
-┌─────────────────┐
-│   Memory Cache  │  ← LRU/LFU with TTL
-│   (RAM)         │
-├─────────────────┤
-│   Disk Cache    │  ← Persistent storage
-│   (Local)       │
-├─────────────────┤
-│   Redis Cache   │  ← Distributed cache
-│   (Optional)    │
-└─────────────────┘
-```
-
-### Vector Index Architecture
-
-```
-┌─────────────────┐
-│   Input Data    │
-│   (Text/Audio/  │
-│    Video)       │
-├─────────────────┤
-│   Feature       │  ← Embedding generation
-│   Extraction    │
-├─────────────────┤
-│   FAISS Index   │  ← Vector similarity
-│   (Flat/IVF/    │     search
-│    HNSW)        │
-└─────────────────┘
-```
-
-## Performance Features
-
-### Eviction Policies
-- **LRU (Least Recently Used)**: Removes least recently accessed items
-- **LFU (Least Frequently Used)**: Removes least frequently accessed items
-- **TTL (Time To Live)**: Automatic expiration based on time
-
-### Scaling Features
-- **Auto-sharding**: Automatic Redis sharding for horizontal scaling
-- **Multi-layer promotion**: Hot data moves to faster layers
-- **Background processing**: Async ingestion for high throughput
-
-### Monitoring
-- **Hit rate tracking**: Real-time cache performance metrics
-- **Memory usage**: Per-layer memory consumption
-- **Request statistics**: Detailed request/response tracking
-
-## Testing
-
-### Run Tests
-
-```bash
-# Run unit tests
-python3 -m unittest prarabdha.tests.test_kv_backends
-
-# Run simple example
-python3 simple_example.py
-
-# Run comprehensive example
-python3 example_usage.py
-
-# Test API
-python3 test_api.py
-```
-
-### Example Output
-
-```
-Prarabdha Clean Import Interface Demo
-==================================================
-=== Chat Caching Demo ===
-Cached chat segment with key: 68d3ccc8fd1c11dadd2d559e214dd360:28d5d305a0cc8e573a65c8aaa9bd4412
-Retrieved: Hello, how can I help you with Python programming?
-Chat cache hit rate: 100.00%
-
-=== Audio Caching Demo ===
-Cached audio features with key: audio1:mfcc
-Retrieved audio features shape: (13, 100)
-Audio cache: 1 files, 1 features
-
-=== Video Caching Demo ===
-Cached video segment with key: video1:segment:seg1
-Retrieved video segment: video1:seg1
-Video cache: 1 videos, 1 segments
-
-=== RAG Caching Demo ===
-Added document with 1 chunks
-Found 2 similar chunks
-RAG cache: 1 documents, 1 chunks
-```
-
-## Roadmap
-
-### Completed Features
-- [x] Multi-layer KV store (RAM, disk, Redis)
-- [x] LRU/LFU eviction policies
-- [x] TTL support for all layers
-- [x] FAISS vector similarity search
-- [x] RAG chunk indexing
-- [x] Audio and video caching
-- [x] FastAPI async ingestion
-- [x] CLI management tools
-- [x] Redis auto-sharding
-- [x] Background processing
-- [x] Clean import interface
+## 🔮 Future Enhancements
 
 ### Planned Features
-- [x] GPU-native tier for vLLM prefill (Basic implementation)
-- [x] Persistent metadata store (SQLite-based)
-- [x] Exportable cache storage (JSON, Parquet, SQLite)
-- [x] Compression and encryption (AES-256 + GZIP/LZMA/ZLIB)
-- [x] Plugin support for custom encoders
-- [x] Advanced monitoring dashboard (Real-time WebSocket)
+- **Real-time streaming** support for live video/audio caching
+- **Distributed caching** across multiple nodes
+- **Advanced embedding models** integration
+- **Cache compression** for storage optimization
+- **API integration** for RESTful cache management
 
-## Contributing
+### Model Integration
+- **CLIP** for video/image embeddings
+- **Wav2Vec2** for audio embeddings
+- **Sentence Transformers** for text embeddings
+- **Custom models** for user-defined embedding functions
+
+## 🤝 Contributing
 
 1. Fork the repository
 2. Create a feature branch
 3. Add tests for new functionality
-4. Ensure all tests pass
-5. Submit a pull request
+4. Submit a pull request
 
-## License
+## 📄 License
 
-MIT License - see LICENSE file for details.
+MIT License - see LICENSE file for details
 
-## Support
+## 📚 Citation
 
-For questions and support, please open an issue on GitHub or contact the maintainers.
+If you use this system in your research, please cite:
+
+```bibtex
+@software{prarabdha_multimodal_2025,
+  title={Prarabdha: Advanced Multimodal AI Cache System},
+  author={Prarabdha Soni},
+  year={2025},
+  url={https://github.com/prarabdha-soni/prarabdha}
+}
+```
+
+## 🔗 Links
+
+- **PyPI**: https://pypi.org/project/prarabdha/
+- **GitHub**: https://github.com/prarabdha-soni/prarabdha
+- **Documentation**: Coming soon
+- **Issues**: https://github.com/prarabdha-soni/prarabdha/issues
 
 ---
 
-**Prarabdha** - Empowering AI applications with intelligent caching. 
+**Prarabdha** - The fastest multimodal AI cache system for production LLM deployments! 🚀 
